@@ -89,7 +89,18 @@ app.get('/profile/:id', (req, res) => {
 
 //image ~~> PUT  ~~> user
 app.put('/image', (req, res) => {
-  res.send('image');
+  const { id } = req.body;
+  let found = false;
+  database.users.forEach(user => {
+    if (user.id === id) {
+      found = true;
+      user.entries++
+      return res.json(user.entries);
+    }
+  });
+  if (!found) {
+    res.status(404).json('no such user found');
+  }
   console.log('image ranking...');
 });
 
