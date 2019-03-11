@@ -42,35 +42,48 @@ app.get('/', (req, res) => {
 
 //signin ~~> POST = success/fail
 app.post('/signin', (req, res) => {
-  if (
-    req.body.email === database.users[0].email &&
-    req.body.password === database.users[0].password
-  ) {
-    res.json('success');
-  } else {
-    res.status(404).json('error while logging in...');
+  const { email, password } = req.body;
+  let successful = false;
+  database.users.forEach(user => {
+    if (email === user.email && password === user.password) {
+      successful = true;
+      return res.json('success');
+    }
+  });
+  if (!successful) {
+    res.status(404).json('error while signing in...');
   }
   console.log('on the signin page...');
 });
 
 //register ~~> POST  = user
 app.post('/register', (req, res) => {
-  const {email, name, password} = req.body;
+  const { email, name, password } = req.body;
   database.users.push({
     id: '004',
-      name,
-      email,
-      password,
-      entries: 0,
-      joined: new Date(),
-  })
+    name,
+    email,
+    password,
+    entries: 0,
+    joined: new Date(),
+  });
   res.json(database.users[database.users.length - 1]);
   console.log('on the registration page...');
 });
 
 //profile/:userId GET = user
-app.get('/profile/:userId', (req, res) => {
-  res.send('profile');
+app.get('/profile/:id', (req, res) => {
+  const { id } = req.params;
+  let found = false;
+  database.users.forEach(user => {
+    if (user.id === id) {
+      found = true;
+      return res.json(user);
+    }
+  });
+  if (!found) {
+    res.status(404).json('no such user found');
+  }
   console.log('on the profile page...');
 });
 
