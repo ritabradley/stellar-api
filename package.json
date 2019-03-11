@@ -1,0 +1,30 @@
+{
+  "name": "stellar-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ritabradley/stellar-api.git"
+  },
+  "keywords": [
+    "api",
+    "nodejs"
+  ],
+  "author": "Rita Bradley",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ritabradley/stellar-api/issues"
+  },
+  "homepage": "https://github.com/ritabradley/stellar-api#readme",
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  }
+}
