@@ -1,7 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
 const port = 3000;
 const app = express();
+
+const saltRounds = 10;
 
 app.use(bodyParser.json());
 
@@ -32,6 +35,13 @@ const database = {
       joined: new Date(),
     },
   ],
+  login: [
+    {
+      id: '474',
+      hash: '',
+      email: 'evan@email.com',
+    },
+  ],
 };
 
 // ~~>  root
@@ -40,9 +50,18 @@ app.get('/', (req, res) => {
   console.log('up and running...');
 });
 
-//signin ~~> POST = success/fail
+// signin ~~> POST = success/fail
 app.post('/signin', (req, res) => {
   const { email, password } = req.body;
+  // check a password
+  bcrypt.compare(password, '$2b$10$yyPNTwWosMWLLugR.0AV2O2rypPLnMxMJvqbw8.fBQG16uF9hsfOS', function(err, res) {
+    // res == true
+    console.log('first guess', res);
+  });
+  bcrypt.compare('pothead', '$2b$10$yyPNTwWosMWLLugR.0AV2O2rypPLnMxMJvqbw8.fBQG16uF9hsfOS', function(err, res) {
+    // res == false
+    console.log('second guess', res);
+  });
   let successful = false;
   database.users.forEach(user => {
     if (email === user.email && password === user.password) {
@@ -56,9 +75,14 @@ app.post('/signin', (req, res) => {
   console.log('on the signin page...');
 });
 
-//register ~~> POST  = user
+// register ~~> POST  = user
 app.post('/register', (req, res) => {
   const { email, name, password } = req.body;
+  // hash a password
+  bcrypt.hash(password, saltRounds, function(err, hash) {
+    // Store hash in your password DB.
+    console.log(hash);
+  });
   database.users.push({
     id: '004',
     name,
@@ -71,7 +95,7 @@ app.post('/register', (req, res) => {
   console.log('on the registration page...');
 });
 
-//profile/:userId GET = user
+// profile/:userId GET = user
 app.get('/profile/:id', (req, res) => {
   const { id } = req.params;
   let found = false;
@@ -87,14 +111,14 @@ app.get('/profile/:id', (req, res) => {
   console.log('on the profile page...');
 });
 
-//image ~~> PUT  ~~> user
+// image ~~> PUT  ~~> user
 app.put('/image', (req, res) => {
   const { id } = req.body;
   let found = false;
   database.users.forEach(user => {
     if (user.id === id) {
       found = true;
-      user.entries++
+      user.entries++;
       return res.json(user.entries);
     }
   });
