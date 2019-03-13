@@ -2,12 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const port = 3000;
+const cors = require('cors');
 const app = express();
 
 const saltRounds = 10;
 
 app.use(bodyParser.json());
-
+app.use(cors());
 const database = {
   users: [
     {
@@ -47,21 +48,28 @@ const database = {
 // ~~>  root
 app.get('/', (req, res) => {
   res.send(database.users);
-  console.log('up and running...');
 });
 
 // signin ~~> POST = success/fail
 app.post('/signin', (req, res) => {
   const { email, password } = req.body;
   // check a password
-  bcrypt.compare(password, '$2b$10$yyPNTwWosMWLLugR.0AV2O2rypPLnMxMJvqbw8.fBQG16uF9hsfOS', function(err, res) {
-    // res == true
-    console.log('first guess', res);
-  });
-  bcrypt.compare('pothead', '$2b$10$yyPNTwWosMWLLugR.0AV2O2rypPLnMxMJvqbw8.fBQG16uF9hsfOS', function(err, res) {
-    // res == false
-    console.log('second guess', res);
-  });
+  bcrypt.compare(
+    password,
+    '$2b$10$yyPNTwWosMWLLugR.0AV2O2rypPLnMxMJvqbw8.fBQG16uF9hsfOS',
+    function(err, res) {
+      // res == true
+      console.log('first guess', res);
+    },
+  );
+  bcrypt.compare(
+    'pothead',
+    '$2b$10$yyPNTwWosMWLLugR.0AV2O2rypPLnMxMJvqbw8.fBQG16uF9hsfOS',
+    function(err, res) {
+      // res == false
+      console.log('second guess', res);
+    },
+  );
   let successful = false;
   database.users.forEach(user => {
     if (email === user.email && password === user.password) {
