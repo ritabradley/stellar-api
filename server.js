@@ -74,13 +74,12 @@ app.post('/signin', (req, res) => {
   database.users.forEach(user => {
     if (email === user.email && password === user.password) {
       successful = true;
-      return res.json('success');
+      return res.json(database.users[0]);
     }
   });
   if (!successful) {
     res.status(404).json('error while signing in...');
   }
-  console.log('on the signin page...');
 });
 
 // register ~~> POST  = user
@@ -95,12 +94,10 @@ app.post('/register', (req, res) => {
     id: '004',
     name,
     email,
-    password,
     entries: 0,
     joined: new Date(),
   });
   res.json(database.users[database.users.length - 1]);
-  console.log('on the registration page...');
 });
 
 // profile/:userId GET = user
@@ -116,7 +113,6 @@ app.get('/profile/:id', (req, res) => {
   if (!found) {
     res.status(404).json('no such user found');
   }
-  console.log('on the profile page...');
 });
 
 // image ~~> PUT  ~~> user
@@ -133,7 +129,6 @@ app.put('/image', (req, res) => {
   if (!found) {
     res.status(404).json('no such user found');
   }
-  console.log('image ranking...');
 });
 
 app.listen(port, console.log(`Now listening on port: ${port}...`));
