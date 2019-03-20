@@ -27,7 +27,7 @@ app.use(cors());
 
 // ~~>  root
 app.get('/', (req, res) => {
-  res.send(database.users);
+  res.send(`up and running`);
 });
 
 // signin ~~> POST = success/fail
