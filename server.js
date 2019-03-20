@@ -50,4 +50,8 @@ app.put('/image', (req, res) => {
   image.handleImage(req, res, db);
 });
 
+// image ~~> POST
+app.post('/imageurl', (req, res) => {
+  image.handleApiCall(req, res);
+});
 app.listen(port, console.log(`Now listening on port: ${port}...`));
