@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
-const port = 3000;
+const PORT = process.env.PORT;
 const cors = require('cors');
 const app = express();
 const saltRounds = 10;
@@ -54,4 +54,4 @@ app.put('/image', (req, res) => {
 app.post('/imageurl', (req, res) => {
   image.handleApiCall(req, res);
 });
-app.listen(port, console.log(`Now listening on port: ${port}...`));
+app.listen(PORT || 3000, console.log(`Now listening on port: ${PORT}...`));
